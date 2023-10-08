@@ -1,0 +1,35 @@
+from pygame import *
+
+def update(self):
+    ''' перемещает персонажа, применяя текущую горизонтальную и вертикальную скорость'''
+    # сначала движение по горизонтали
+    if packman.rect.x <= win_width - 80 and packman.x_speed > 0 or packman.rect.x >= 0 and packman.x_speed < 0:
+        self.rect.x += self.x_speed
+    # если зашли за стенку, то встанем вплотную к стене
+    platforms_touched = sprite.spritecollide(self, barriers, False)
+    if self.x_speed > 0:
+        for p in platforms_touched:
+            self.rect.right = min(self.rect.right,p.rect.left)
+    elif self.x_speed < 0:
+        for p in platforms_touched:
+            self.rect.left = max(self.rect.left,
+                                 p.rect.right)  # если коснулись нескольких стен, то левый край - максимальный
+    if packman.rect.y <= win_height - 80 and packman.y_speed > 0 or packman.rect.y >= 0 and packman.y_speed < 0:
+        self.rect.y += self.y_speed
+    # если зашли за стенку, то встанем вплотную к стене
+    platforms_touched = sprite.spritecollide(self, barriers, False)
+    if self.y_speed > 0:  # идем вниз
+        for p in platforms_touched:
+            self.y_speed = 0
+            # Проверяем, какая из платформ снизу самая высокая, выравниваемся по ней, запоминаем её как свою опору:
+            if p.rect.top < self.rect.bottom:
+                self.rect.bottom = p.rect.top
+    elif self.y_speed < 0:  # идем вверх
+        for p in platforms_touched:
+            self.y_speed = 0  # при столкновении со стеной вертикальная скорость гасится
+            self.rect.top = max(self.rect.top,
+                                p.rect.bottom)
+
+class E
+
+
